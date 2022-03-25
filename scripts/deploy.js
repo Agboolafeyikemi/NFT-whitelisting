@@ -1,25 +1,20 @@
+import { messagePrefix } from "@ethersproject/hash";
+import { Signer } from "ethers";
 import { ethers } from "hardhat";
 
-
-
 async function main() {
-  const [owner, addr1] = await ethers.getSigners();
-  console.log(owner.address, addr1.address);
-  const BRT = await ethers.getContractFactory("BoredApeToken");
-  const Staking = await ethers.getContractFactory("BRTStaking");
-  
-  const brt = BRT.deploy(10000000);
-  await brt.deployed();
-  const staking = Staking.deploy(brt.address, NFT, owner.address);
-  await staking.deployed();
-  
-  //Approve Staking Contract To Spend From Reserve
-  brt.approve(staking, brt.balanaceOf(owner));
+  // We get the contract to deploy
+  const owner = (await ethers.getSigners())[0].address;
 
-  console.log(`BRT Token deployed to: ${brt.address}`);
-  console.log(`Staking Contract Deployed to: ${staking.address}`);
+  const staking = await ethers.getContractFactory("BoaredApe");
+  const deployStaking = await staking.deploy("BoredApe", "BRT");
+
+  await deployStaking.deployed();
+  console.log("staking address", deployStaking.address);
 }
 
+// We recommend this pattern to be able to use async/await everywhere
+// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
