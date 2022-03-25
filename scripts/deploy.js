@@ -1,5 +1,3 @@
-import { messagePrefix } from "@ethersproject/hash";
-import { Signer } from "ethers";
 import { ethers } from "hardhat";
 
 async function main() {
